@@ -1,0 +1,86 @@
+/* Append to existing index.css */
+
+/* Loader Styles */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #050505;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+.loader-text {
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.2rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Griflan-style Lock Tron Typography */
+.locktron-title-container {
+  pointer-events: none;
+  user-select: none;
+  z-index: -1; /* Keep it strictly behind the hardware */
+}
+
+.locktron-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(6rem, 12vw, 15rem); /* Increased scale massively */
+  font-weight: 900;
+  /* Massive visibility bump - switched from faint ghosting to a bold, slightly transparent fill with a glowing text-shadow */
+  color: rgba(255, 255, 255, 0.4); 
+  text-shadow: 0 0 40px rgba(170, 59, 255, 0.2); /* Subtle purple glow behind the massive text */
+  white-space: nowrap;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Precision Tech Stack UI Labels */
+.precision-label {
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-weight: 600; /* Made the labels bolder */
+}
+
+.precision-label .line {
+  height: 2px; /* Thicker precision lines */
+  width: 50px;
+  background-color: #aa3bff;
+  margin-right: 10px;
+  box-shadow: 0 0 10px rgba(170, 59, 255, 0.5); /* Glowing lines */
+}
+
+.precision-label.left .line {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.precision-label .line.right {
+  order: 2;
+}
+
+.precision-label .line.bottom {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  width: 2px;
+  height: 40px;
+}
