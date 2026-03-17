@@ -92,7 +92,7 @@ function App() {
       </Canvas>
 
       {/* Leva UI for the 'Playground' controllers */}
-      <Leva collapsed={false} fill={false} titleBar={{ title: 'Global Configurations' }} />
+      <Leva collapsed={false} fill={false} titleBar={{ title: 'Global Configurations' }} hidden />
     </ReactLenis>
   );
 }

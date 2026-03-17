@@ -33,7 +33,7 @@
 
 .locktron-title {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(6rem, 12vw, 15rem); /* Increased scale massively */
+  font-size: clamp(4rem, 10vw, 15rem); /* Scaled down minimum for mobile */
   font-weight: 900;
   /* Massive visibility bump - switched from faint ghosting to a bold, slightly transparent fill with a glowing text-shadow */
   color: rgba(255, 255, 255, 0.4); 
@@ -43,6 +43,13 @@
   letter-spacing: -0.05em;
   text-align: center;
   text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .locktron-title {
+    font-size: 3rem; 
+    white-space: normal; /* Allow wrapping on small screens */
+  }
 }
 
 /* Precision Tech Stack UI Labels */
@@ -58,6 +65,12 @@
   display: flex;
   align-items: center;
   font-weight: 600; /* Made the labels bolder */
+}
+
+@media (max-width: 768px) {
+  .precision-label {
+    font-size: 0.6rem; /* Scale down on mobile to prevent overlaps */
+  }
 }
 
 .precision-label .line {

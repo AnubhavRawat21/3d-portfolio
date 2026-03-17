@@ -48,8 +48,11 @@ export function CoreObject() {
         <MeshTransmissionMaterial
           {...materialProps}
           transmission={1}
-          ior={1.4}
-          resolution={1024}
+          ior={1.2}
+          thickness={1.5}
+          roughness={0}
+          chromaticAberration={0.8}
+          resolution={512}
         />
       </mesh>
     </group>

@@ -50,14 +50,15 @@ export function Footer() {
             </div>
             <div className="footer-link-wrapper">
               <MagneticTag>
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-link">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/anubhav-rawat-544171230/" target="_blank" rel="noreferrer" className="footer-link">LinkedIn</a>
               </MagneticTag>
             </div>
             <div className="footer-link-wrapper">
               <MagneticTag>
-                <a href="https://github.com" target="_blank" rel="noreferrer" className="footer-link">GitHub</a>
+                <a href="https://github.com/AnubhavRawat21" target="_blank" rel="noreferrer" className="footer-link">GitHub</a>
               </MagneticTag>
             </div>
+            {/* Kept instagram link generic assuming no requested update */}
             <div className="footer-link-wrapper">
               <MagneticTag>
                 <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link">Instagram</a>
