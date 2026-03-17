@@ -33,11 +33,11 @@
 
 .locktron-title {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(4rem, 10vw, 15rem); /* Scaled down minimum for mobile */
+  font-size: 2rem; /* Significantly reduced because distanceFactor=15 scales it massively up in 3D */
   font-weight: 900;
   /* Massive visibility bump - switched from faint ghosting to a bold, slightly transparent fill with a glowing text-shadow */
   color: rgba(255, 255, 255, 0.4); 
-  text-shadow: 0 0 40px rgba(170, 59, 255, 0.2); /* Subtle purple glow behind the massive text */
+  text-shadow: 0 0 10px rgba(170, 59, 255, 0.4); /* Sharper, closer glow for the scaled text */
   white-space: nowrap;
   line-height: 0.85;
   letter-spacing: -0.05em;
@@ -47,7 +47,6 @@
 
 @media (max-width: 768px) {
   .locktron-title {
-    font-size: 3rem; 
     white-space: normal; /* Allow wrapping on small screens */
   }
 }

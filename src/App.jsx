@@ -22,17 +22,19 @@ function CameraScrollRig() {
   const cameraRef = React.useRef(null);
 
   React.useLayoutEffect(() => {
-    // We bind to the top and bottom of the entire document
-    // This perfectly scrubs the Camera Y from 0 to -5 as the user scrolls
     const ctx = gsap.context(() => {
+      // Map the entire page scroll to a deep dive into the Z-axis
+      // Start (Hero) = Z: 5
+      // Middle (LockTron) = Z: -25
+      // End (About) = Z: -80
       gsap.to(cameraRef.current.position, {
-        y: -5,
+        z: -80, 
         ease: 'none',
         scrollTrigger: {
-          trigger: document.body,
+          trigger: '#scroll-container', // Bind to the entire scrollable area
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1, // Smooth scrub
+          scrub: 1, 
         }
       });
     });
@@ -65,7 +67,9 @@ function App() {
         </section>
 
         {/* Phase 4 HTML Content Sections */}
-        <AboutSection />
+        <div id="about-section">
+          <AboutSection />
+        </div>
         <ProjectsSection />
         <TimelineSection />
         <Footer />
@@ -79,6 +83,8 @@ function App() {
         eventSource={document.getElementById('root')}
         eventPrefix="client"
       >
+        <color attach="background" args={['#050505']} />
+        <fog attach="fog" args={['#050505', 10, 40]} />
         <Suspense fallback={null}>
             {/* The Camera Scroll logic binds the 3D Y-axis to window.scrollY */}
             <CameraScrollRig />

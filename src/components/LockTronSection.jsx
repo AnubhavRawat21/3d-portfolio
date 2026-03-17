@@ -7,7 +7,7 @@ import { MagneticTag } from './MagneticTag';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function LockTronTitle() {
+function LockTronTitle({ opacityRef }) {
   const titleRef = useRef();
 
   useLayoutEffect(() => {
@@ -24,7 +24,7 @@ function LockTronTitle() {
           ease: 'power4.out',
           scrollTrigger: {
             trigger: '#locktron-trigger',
-            start: 'top 80%', // start when locktron-trigger is 20% into the viewport
+            start: 'top 80%', 
           }
         }
       );
@@ -34,9 +34,11 @@ function LockTronTitle() {
   }, []);
 
   return (
-    <h1 ref={titleRef} className="locktron-title" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)' }}>
-      LOCK TRON:<br/>TARGET ACQUIRED
-    </h1>
+    <div ref={opacityRef} style={{ opacity: 0 }}>
+      <h1 ref={titleRef} className="locktron-title" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)' }}>
+        LOCK TRON:<br/>TARGET ACQUIRED
+      </h1>
+    </div>
   );
 }
 
@@ -47,6 +49,15 @@ export function LockTronSection() {
   const cameraRef = useRef();
   const teensyRef = useRef();
   const imuRef = useRef();
+  // Array ref for multiple HTML labels to fade in together
+  const labelsRefs = useRef([]);
+  labelsRefs.current = [];
+
+  const addToLabelsRefs = (el) => {
+    if (el && !labelsRefs.current.includes(el)) {
+      labelsRefs.current.push(el);
+    }
+  };
 
   const metalMaterial = new THREE.MeshStandardMaterial({
     color: '#8a8a8e',
@@ -72,33 +83,44 @@ export function LockTronSection() {
           trigger: '#locktron-trigger',
           start: 'top center',
           end: 'bottom bottom',
-          scrub: 1, // Buttery smooth interpolation
+          scrub: 1, 
         }
       });
 
-      // The Assembly Separates
-      // Camera goes UP along Y
-      tl.to(cameraRef.current.position, { y: 2.5, duration: 1 }, 0);
+      // The Assembly Separates as the camera arrives
       // Teensy shifts slightly right and floats
       tl.to(teensyRef.current.position, { x: 1, y: 0.5, z: 1, duration: 1 }, 0);
       // IMU Drops slightly down and left
       tl.to(imuRef.current.position, { x: -1, y: -1, z: 0.5, duration: 1 }, 0);
+      
+      // Fade in the HTML Labels ONLY when scrolled into this section
+      if (labelsRefs.current.length > 0) {
+        tl.to(labelsRefs.current, { opacity: 1, duration: 1 }, 0);
+      }
     });
 
     return () => ctx.revert();
   }, []);
 
   return (
-    // Positioned below Hero (Hero is 0, LockTron is effectively Y=-5 as we scroll into it)
-    <group ref={groupRef} position={[0, -5, 0]}>
+    // Positioned deep down the Z-axis tunnel. Y is strictly 0 so it aligns with the camera perfectly.
+    // The camera starts at Z=5 and scrolls to Z=-80, passing Z=-30 along the way.
+    <group ref={groupRef} position={[0, 0, -30]}>
       
       {/* Cinematic Local Lighting specifically for the dark metallic hardware */}
       <pointLight position={[0, 2, 2]} intensity={50} color="#4fa3ff" distance={10} />
       <ambientLight intensity={0.5} />
 
-      {/* Background Typography */}
-      <Html position={[0, 0, -5]} transform center className="locktron-title-container">
-        <LockTronTitle />
+      {/* Background Typography - scaled based on distance so it vanishes deep in the tunnel */}
+      <Html 
+        position={[0, 0, -5]} 
+        transform 
+        center 
+        distanceFactor={15}
+        zIndexRange={[100, 0]}
+        className="locktron-title-container"
+      >
+        <LockTronTitle opacityRef={addToLabelsRefs} />
       </Html>
 
       {/* CORE CHASSIS (Teensy Microcontroller Representation) */}
@@ -118,13 +140,15 @@ export function LockTronSection() {
           <boxGeometry args={[1, 1, 1]} />
         </mesh>
 
-        <Html position={[1.5, 0.2, 0]}>
-          <MagneticTag>
-            <div className="precision-label">
-              <div className="line"></div>
-              Embedded C
-            </div>
-          </MagneticTag>
+        <Html position={[1.5, 0.2, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+          <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
+            <MagneticTag>
+              <div className="precision-label">
+                <div className="line"></div>
+                Embedded C
+              </div>
+            </MagneticTag>
+          </div>
         </Html>
       </group>
 
@@ -143,13 +167,15 @@ export function LockTronSection() {
           <cylinderGeometry args={[1, 1, 1, 32]} />
         </mesh>
 
-        <Html position={[-0.5, 0.5, 0]}>
-          <MagneticTag>
-            <div className="precision-label left">
-              OpenCV Tracking
-              <div className="line right"></div>
-            </div>
-          </MagneticTag>
+        <Html position={[-0.5, 0.5, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+          <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
+            <MagneticTag>
+              <div className="precision-label left">
+                OpenCV Tracking
+                <div className="line right"></div>
+              </div>
+            </MagneticTag>
+          </div>
         </Html>
       </group>
 
@@ -161,13 +187,15 @@ export function LockTronSection() {
         <mesh material={metalMaterial} position={[0, 0.1, 0]} scale={[0.3, 0.1, 0.3]}>
           <boxGeometry args={[1, 1, 1]} />
         </mesh>
-        <Html position={[-0.8, -0.3, 0]}>
-          <MagneticTag>
-            <div className="precision-label left">
-              IMU Sensor Fusion
-              <div className="line right bottom"></div>
-            </div>
-          </MagneticTag>
+        <Html position={[-0.8, -0.3, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+          <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
+            <MagneticTag>
+              <div className="precision-label left">
+                IMU Sensor Fusion
+                <div className="line right bottom"></div>
+              </div>
+            </MagneticTag>
+          </div>
         </Html>
       </group>
 
