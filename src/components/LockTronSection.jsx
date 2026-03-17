@@ -1,5 +1,6 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import { Html } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,7 +8,9 @@ import { MagneticTag } from './MagneticTag';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function LockTronTitle({ opacityRef }) {
+
+
+function LockTronTitle() {
   const titleRef = useRef();
 
   useLayoutEffect(() => {
@@ -34,24 +37,23 @@ function LockTronTitle({ opacityRef }) {
   }, []);
 
   return (
-    <div ref={opacityRef} style={{ opacity: 0 }}>
-      <h1 ref={titleRef} className="locktron-title" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)' }}>
-        LOCK TRON:<br/>TARGET ACQUIRED
-      </h1>
-    </div>
+    <h1 ref={titleRef} className="locktron-title" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)' }}>
+      LOCK TRON:<br/>TARGET ACQUIRED
+    </h1>
   );
 }
 
-export function LockTronSection() {
+export function LockTronSection({ portal }) {
   const groupRef = useRef();
   
   // Refs for 3D Parts
   const cameraRef = useRef();
   const teensyRef = useRef();
   const imuRef = useRef();
+  
   // Array ref for multiple HTML labels to fade in together
   const labelsRefs = useRef([]);
-  labelsRefs.current = [];
+  labelsRefs.current = []; // Refresh on every render
 
   const addToLabelsRefs = (el) => {
     if (el && !labelsRefs.current.includes(el)) {
@@ -92,15 +94,25 @@ export function LockTronSection() {
       tl.to(teensyRef.current.position, { x: 1, y: 0.5, z: 1, duration: 1 }, 0);
       // IMU Drops slightly down and left
       tl.to(imuRef.current.position, { x: -1, y: -1, z: 0.5, duration: 1 }, 0);
-      
-      // Fade in the HTML Labels ONLY when scrolled into this section
-      if (labelsRefs.current.length > 0) {
-        tl.to(labelsRefs.current, { opacity: 1, duration: 1 }, 0);
-      }
     });
 
     return () => ctx.revert();
   }, []);
+
+  useFrame((state) => {
+    const camZ = state.camera.position.z;
+    let opacity = 0;
+    if (camZ <= -25) {
+      opacity = 1;
+    } else if (camZ <= -15) {
+      opacity = (camZ - -15) / (-25 - -15);
+    }
+    const finalOpacity = Math.max(0, Math.min(1, opacity));
+    
+    labelsRefs.current.forEach(el => {
+      if (el) el.style.opacity = finalOpacity;
+    });
+  });
 
   return (
     // Positioned deep down the Z-axis tunnel. Y is strictly 0 so it aligns with the camera perfectly.
@@ -119,8 +131,11 @@ export function LockTronSection() {
         distanceFactor={15}
         zIndexRange={[100, 0]}
         className="locktron-title-container"
+        portal={portal}
       >
-        <LockTronTitle opacityRef={addToLabelsRefs} />
+        <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
+          <LockTronTitle />
+        </div>
       </Html>
 
       {/* CORE CHASSIS (Teensy Microcontroller Representation) */}
@@ -140,7 +155,7 @@ export function LockTronSection() {
           <boxGeometry args={[1, 1, 1]} />
         </mesh>
 
-        <Html position={[1.5, 0.2, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+        <Html position={[1.5, 0.2, 0]} transform distanceFactor={5} zIndexRange={[100, 0]} portal={portal}>
           <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
             <MagneticTag>
               <div className="precision-label">
@@ -167,7 +182,7 @@ export function LockTronSection() {
           <cylinderGeometry args={[1, 1, 1, 32]} />
         </mesh>
 
-        <Html position={[-0.5, 0.5, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+        <Html position={[-0.5, 0.5, 0]} transform distanceFactor={5} zIndexRange={[100, 0]} portal={portal}>
           <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
             <MagneticTag>
               <div className="precision-label left">
@@ -187,7 +202,7 @@ export function LockTronSection() {
         <mesh material={metalMaterial} position={[0, 0.1, 0]} scale={[0.3, 0.1, 0.3]}>
           <boxGeometry args={[1, 1, 1]} />
         </mesh>
-        <Html position={[-0.8, -0.3, 0]} transform distanceFactor={5} zIndexRange={[100, 0]}>
+        <Html position={[-0.8, -0.3, 0]} transform distanceFactor={5} zIndexRange={[100, 0]} portal={portal}>
           <div ref={addToLabelsRefs} style={{ opacity: 0 }}>
             <MagneticTag>
               <div className="precision-label left">

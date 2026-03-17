@@ -46,8 +46,14 @@ function CameraScrollRig() {
 }
 
 function App() {
+  const portalRef = React.useRef(null);
+
   return (
-    <ReactLenis root>
+    <>
+      {/* Target for Drei HTML portals so they stay strictly fixed to the viewport */}
+      <div ref={portalRef} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 5 }} />
+      
+      <ReactLenis root>
       <CustomCursor />
       <Loader />
 
@@ -78,7 +84,7 @@ function App() {
       {/* Fixed Background 3D Canvas */}
       <Canvas
         camera={{ position: [0, 0, 5], fov: 45 }}
-        style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}
+        style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
         gl={{ antialias: true, alpha: true }}
         eventSource={document.getElementById('root')}
         eventPrefix="client"
@@ -93,13 +99,14 @@ function App() {
             <Experience />
             
             {/* The LockTron Section is positioned deeper and responds to ScrollTrigger */}
-            <LockTronSection />
+            <LockTronSection portal={portalRef} />
         </Suspense>
       </Canvas>
 
       {/* Leva UI for the 'Playground' controllers */}
       <Leva collapsed={false} fill={false} titleBar={{ title: 'Global Configurations' }} hidden />
     </ReactLenis>
+    </>
   );
 }
 
