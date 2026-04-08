@@ -265,21 +265,46 @@
    TIMELINE SECTION
 -------------------- */
 /* -------------------
-   TIMELINE SECTION (LOCKTRON RIBBON)
+   TIMELINE SECTION (LOCKTRON RIBBON - HORIZONTAL)
 -------------------- */
-.ribbon-wrapper {
-  position: relative;
+.timeline-horizontal-container {
+  height: 100vh;  /* Full viewport height to immerse in 3D timeline */
   width: 100%;
-  height: 400px;
-  margin-top: 2rem;
+  position: relative;
+  overflow: hidden; /* Hide the horizontal overflow */
+  z-index: 10;
+}
+
+.timeline-horizontal-scroll {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content; /* Allows container to span beyond 100vw */
+}
+
+.ribbon-horizontal-wrapper {
+  position: relative;
+  width: 3600px; /* Matches SVG width */
+  height: 600px;
+  /* Add padding to the left so the timeline starts drawing from the center/right initially */
+  margin-left: 20vw;
+  padding-right: 50vw;
+}
+
+.ribbon-title-float {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
 }
 
 .ribbon-svg-container {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
-  width: 100%;
-  height: 100%;
+  transform: translateY(-50%);
+  width: 3600px;
+  height: 400px;
   z-index: 1;
 }
 
@@ -291,10 +316,11 @@
 
 .ribbon-nodes-container {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
+  transform: translateY(-50%);
   width: 100%;
-  height: 100%;
+  height: 400px;
   z-index: 2;
   pointer-events: none;
 }
@@ -308,17 +334,15 @@
   pointer-events: auto;
 }
 
-/* Position nodes top/bottom to simulate pinning over the wave */
 .node-top {
-  top: 15%; /* Higher on the wave curve */
+  top: 15%;
   flex-direction: column-reverse;
 }
 
 .node-bottom {
-  top: 45%; /* Deep inside the trough of the wave */
+  top: 45%;
 }
 
-/* Floating Node Icon Container */
 .node-icon-wrapper {
   width: 60px;
   height: 60px;
@@ -337,14 +361,12 @@
   height: 30px;
 }
 
-/* Pin connecting icon to ribbon */
 .node-pin-line {
   width: 2px;
   height: 40px;
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Dot on the ribbon */
 .node-dot {
   width: 16px;
   height: 16px;
@@ -354,30 +376,78 @@
   z-index: 2;
 }
 
-.node-content {
+/* Hover Expandable Content */
+.node-content.hover-expand {
   text-align: center;
-  background: rgba(10, 10, 10, 0.7);
+  background: rgba(10, 10, 10, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 1.2rem;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  min-width: 300px;
-  max-width: 380px;
+  min-width: 250px;
+  width: 300px;
   margin: 10px 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  height: 110px; /* Collapsed Height */
+  display: flex;
+  flex-direction: column;
 }
 
-.node-top .node-content {
-  margin-bottom: 20px;
+.node-content.hover-expand:hover {
+  height: 500px; /* Expanded Height */
+  width: 400px;
+  background: rgba(15, 15, 15, 0.95);
+  border-color: rgba(79, 163, 255, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  z-index: 100;
 }
 
-.node-bottom .node-content {
-  margin-top: 20px;
+/* Keep node content on top of other nodes when hovered */
+.ribbon-node:hover {
+  z-index: 100;
+}
+
+.node-content-header {
+  flex-shrink: 0;
+  height: auto;
+}
+
+.node-content-body {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none; /* Ignore clicks when hidden */
+}
+
+.node-content.hover-expand:hover .node-content-body {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.node-image {
+  width: 100%;
+  height: 150px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.node-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .node-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 1px;
   display: block;
@@ -397,18 +467,18 @@
   font-family: 'Outfit', sans-serif;
   font-size: 0.85rem;
   color: #cccccc;
-  line-height: 1.4;
-  margin: 0 0 1rem 0;
+  line-height: 1.5;
+  margin: 0;
   padding-left: 1rem;
   text-align: left;
 }
 
 .node-bullets li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .node-date {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 900;
   margin: 0;
 }
@@ -430,19 +500,37 @@
 .gradient-text-4 { background: linear-gradient(135deg, #00c6ff, #0072ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
 @media (max-width: 900px) {
-  .ribbon-wrapper {
-    height: 600px;
+  /* Fallback to vertical layout for mobile */
+  .timeline-horizontal-container {
+    height: auto;
+  }
+  .timeline-horizontal-scroll {
+    width: 100%;
+  }
+  .ribbon-horizontal-wrapper {
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+    padding-right: 0;
+  }
+  .ribbon-title-float {
+    position: relative;
+    top: 0;
+    left: 0;
+    text-align: center;
+    margin-bottom: 2rem;
   }
   .ribbon-svg-container {
-    display: none; /* Can implement a vertical version here or fallback */
+    display: none;
   }
   .ribbon-nodes-container {
+    position: relative;
+    top: 0;
+    transform: none;
+    height: auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    padding-left: 40px;
-    border-left: 2px solid rgba(255,255,255,0.1);
+    padding-left: 20px;
   }
   .ribbon-node {
     position: relative;
@@ -450,22 +538,30 @@
     left: 0 !important;
     top: 0 !important;
     flex-direction: row;
-    margin-bottom: 2rem;
+    align-items: flex-start;
+    margin-bottom: 3rem;
   }
   .node-pin-line {
-    width: 30px;
-    height: 2px;
+    display: none;
   }
   .node-dot {
     position: absolute;
-    left: -49px;
+    left: 22px;
+    top: 22px;
   }
   .node-icon-wrapper {
     margin: 0 20px 0 0;
+    flex-shrink: 0;
   }
-  .node-content {
-    margin: 0;
-    text-align: left;
+  .node-content.hover-expand {
+    width: 100% !important;
+    max-width: 400px;
+    height: auto !important; /* Always expanded on mobile */
+  }
+  .node-content-body {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
   }
 }
 

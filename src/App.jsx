@@ -10,7 +10,6 @@ import { LockTronSection } from './components/LockTronSection';
 import { Loader } from './components/Loader';
 import { CustomCursor } from './components/CustomCursor';
 import { AboutSection } from './components/AboutSection';
-import { ProjectsSection } from './components/ProjectsSection';
 import { TimelineSection } from './components/TimelineSection';
 import { Footer } from './components/Footer';
 import './locktron.css';
@@ -76,7 +75,6 @@ function App() {
         <div id="about-section">
           <AboutSection />
         </div>
-        <ProjectsSection />
         <TimelineSection />
         <Footer />
       </div>
