@@ -8,11 +8,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    id: 5,
+    title: 'LockTron: Target Acquired',
+    subtitle: 'Embedded Computer Vision',
+    tech: ['Embedded C', 'OpenCV Tracking', 'IMU Sensor Fusion', 'Teensy', 'ROS2'],
+    image: '/images/locktron.jpeg',
+    desc: 'Engineered an autonomous target acquisition module leveraging a Teensy microcontroller and IMU sensor fusion. Implemented custom OpenCV tracking algorithms for low-latency target locking, featuring complex 3D tracking visualizations.'
+  },
+  {
     id: 1,
     title: 'AI-Integrated Mobile Assistant for ADHD',
     subtitle: 'Mobile AI',
     tech: ['Flutter', 'Dart', 'Google Fit API', 'gkeepapi', 'Python'],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+    image: '/images/1.png',
     desc: 'Built a Flutter-based mobile app with an AI avatar to help individuals with ADHD. Integrated Google Fit API for health tracking, Google Keep API for journal automation, and designed an accessibility-first interface with reminders and focus assistance.'
   },
   {
@@ -20,7 +28,7 @@ const projects = [
     title: 'Sawara – Geo-Fencing Security Platform',
     subtitle: 'SIH · Machine Learning / Blockchain',
     tech: ['Python', 'Pandas', 'NumPy', 'Solidity', 'Node.js', 'React'],
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    image: '/images/sawara.jpeg',
     desc: 'Designed and implemented a web-based geo-fencing system for secure visitor management. Leveraged machine learning models to track real-time visitor metrics (including heartbeat and precise geolocation). Ensured robust security by integrating blockchain-based smart contracts for immutable access records.'
   },
   {
@@ -28,7 +36,7 @@ const projects = [
     title: 'DD ROBOCON 2025',
     subtitle: 'Computer Vision & Odometry',
     tech: ['Object Detection', 'Systems Integration', 'Agile'],
-    image: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=800&q=80',
+    image: '/images/robocon.jpeg',
     desc: 'Developed computer vision and odometry-related projects, including object detection models with 98%+ accuracy. Implemented systems integration solutions, reducing failure rates by 20%. Applied agile methodologies boosting team efficiency by 40%.'
   },
   {
@@ -36,7 +44,7 @@ const projects = [
     title: 'Robotics Systems & Simulation',
     subtitle: 'ROS2 + Docker · EYANTRA',
     tech: ['ROS2', 'Gazebo', 'Rviz', 'Odometry', 'Micro-ROS', 'Jetson Orin Nano'],
-    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+    image: '/images/ros2.jpeg',
     desc: 'Built a Dockerized ROS2 environment on Jetson Orin Nano integrating micro-ROS for Teensy. Simulated autonomous behaviors using Gazebo and RViz. Cleared the simulation-based EYANTRA round using ArUco marker detection and autonomous navigation commands.'
   }
 ];

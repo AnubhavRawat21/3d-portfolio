@@ -264,94 +264,209 @@
 /* -------------------
    TIMELINE SECTION
 -------------------- */
-.timeline-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+/* -------------------
+   TIMELINE SECTION (LOCKTRON RIBBON)
+-------------------- */
+.ribbon-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-top: 2rem;
 }
+
+.ribbon-svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.ribbon-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ribbon-nodes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ribbon-node {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+/* Position nodes top/bottom to simulate pinning over the wave */
+.node-top {
+  top: 15%; /* Higher on the wave curve */
+  flex-direction: column-reverse;
+}
+
+.node-bottom {
+  top: 45%; /* Deep inside the trough of the wave */
+}
+
+/* Floating Node Icon Container */
+.node-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  margin: 10px 0;
+  position: relative;
+  z-index: 3;
+}
+
+.node-svg-icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* Pin connecting icon to ribbon */
+.node-pin-line {
+  width: 2px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Dot on the ribbon */
+.node-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  z-index: 2;
+}
+
+.node-content {
+  text-align: center;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 300px;
+  max-width: 380px;
+  margin: 10px 0;
+}
+
+.node-top .node-content {
+  margin-bottom: 20px;
+}
+
+.node-bottom .node-content {
+  margin-top: 20px;
+}
+
+.node-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.node-tech {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  color: #888888;
+  display: block;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.node-bullets {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: #cccccc;
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.node-bullets li {
+  margin-bottom: 0.4rem;
+}
+
+.node-date {
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+/* Gradients for Nodes matching the Reference Image */
+.gradient-1 { background: linear-gradient(135deg, #f12711, #f5af19); }
+.gradient-2 { background: linear-gradient(135deg, #8a2387, #e94057); }
+.gradient-3 { background: linear-gradient(135deg, #ec008c, #fc6767); }
+.gradient-4 { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+
+.bg-gradient-1 { background: #f5af19; }
+.bg-gradient-2 { background: #e94057; }
+.bg-gradient-3 { background: #fc6767; }
+.bg-gradient-4 { background: #0072ff; }
+
+.gradient-text-1 { background: linear-gradient(135deg, #f12711, #f5af19); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-text-2 { background: linear-gradient(135deg, #8a2387, #e94057); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-text-3 { background: linear-gradient(135deg, #ec008c, #fc6767); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.gradient-text-4 { background: linear-gradient(135deg, #00c6ff, #0072ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
 @media (max-width: 900px) {
-  .timeline-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
+  .ribbon-wrapper {
+    height: 600px;
   }
-}
-
-.timeline-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline-container {
-  display: flex;
-  flex-direction: column;
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
-  padding-left: 2rem;
-  margin-left: 1rem; /* Space for the dot */
-}
-
-.timeline-item {
-  position: relative;
-  padding: 2rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.timeline-item:last-child {
-  border-bottom: none;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: -2.45rem; /* Center over the border line */
-  top: 2.5rem;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #333333;
-  border: 2px solid #050505;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.timeline-item:hover .timeline-dot {
-  background: #4fa3ff;
-  box-shadow: 0 0 15px #4fa3ff;
-}
-
-.timeline-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-bottom: 0.5rem;
-}
-
-.timeline-header h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.timeline-header h3 span {
-  color: #888;
-  font-weight: 400;
-}
-
-.timeline-date {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.85rem;
-  color: #4fa3ff;
-}
-
-.timeline-org {
-  font-size: 1rem;
-  color: #cccccc;
-  margin: 0 0 0.5rem 0;
-}
-
-.timeline-desc {
-  font-size: 0.95rem;
-  color: #999999;
-  line-height: 1.5;
-  margin: 0;
+  .ribbon-svg-container {
+    display: none; /* Can implement a vertical version here or fallback */
+  }
+  .ribbon-nodes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    padding-left: 40px;
+    border-left: 2px solid rgba(255,255,255,0.1);
+  }
+  .ribbon-node {
+    position: relative;
+    transform: none;
+    left: 0 !important;
+    top: 0 !important;
+    flex-direction: row;
+    margin-bottom: 2rem;
+  }
+  .node-pin-line {
+    width: 30px;
+    height: 2px;
+  }
+  .node-dot {
+    position: absolute;
+    left: -49px;
+  }
+  .node-icon-wrapper {
+    margin: 0 20px 0 0;
+  }
+  .node-content {
+    margin: 0;
+    text-align: left;
+  }
 }
 
 /* -------------------
