@@ -165,7 +165,7 @@ export function TimelineSection() {
         
         <div className="ribbon-horizontal-wrapper">
           <div className="ribbon-title-float">
-             <h2 className="section-title text-shadow-glow" style={{ textAlign: 'center' }}>PROJECT TIMELINE.</h2>
+             <h2 className="section-title text-shadow-glow" style={{ textAlign: 'center' }}>PROJECTS.</h2>
           </div>
 
           {/* Premium Laser Line SVG (Straight, high-tech) */}
@@ -202,6 +202,27 @@ export function TimelineSection() {
                 strokeWidth="4" 
                 filter="url(#laserGlow)" 
               />
+
+              {/* Data stream dashed overlay */}
+              <line 
+                x1="0" y1="200" x2="3600" y2="200" 
+                stroke="#ffffff" 
+                strokeWidth="1" 
+                strokeDasharray="10 20"
+                opacity="0.3"
+              />
+
+              {/* Traveling light particle (Inviting UI element) */}
+              <circle cx="0" cy="200" r="10" fill="#fff" filter="url(#laserGlow)">
+                <animate attributeName="cx" values="0; 3600; 0" dur="15s" repeatCount="indefinite" />
+                <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite" />
+              </circle>
+              
+              {/* Secondary fast light spark */}
+              <circle cx="0" cy="200" r="5" fill="#4facfe" filter="url(#laserGlow)">
+                <animate attributeName="cx" values="0; 3600" dur="4s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" />
+              </circle>
             </svg>
           </div>
 

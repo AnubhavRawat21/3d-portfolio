@@ -59,16 +59,16 @@ function App() {
       {/* HTML Foreground for Scroll Physics and Triggers */}
       <div id="scroll-container" style={{ position: 'relative', zIndex: 10 }}>
         
-        {/* Section 1: Hero (100vh) */}
-        <section id="hero-trigger" style={{ height: '100vh', pointerEvents: 'none' }}>
+        {/* Section 1: Hero (80vh) */}
+        <section id="hero-trigger" style={{ height: '80vh', pointerEvents: 'none' }}>
           <div className="typography-layer">
             <h1>Anubhav Rawat</h1>
             <h2>B.Tech, CSE - Block Chain Technology</h2>
           </div>
         </section>
 
-        {/* Section 2: Lock Tron (150vh to give a nice long scroll for the exploded view) */}
-        <section id="locktron-trigger" style={{ height: '150vh', pointerEvents: 'none' }}>
+        {/* Section 2: Lock Tron (Reduced to 80vh for faster scrolling) */}
+        <section id="locktron-trigger" style={{ height: '80vh', pointerEvents: 'none' }}>
         </section>
 
         {/* Phase 4 HTML Content Sections */}

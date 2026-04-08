@@ -31,21 +31,26 @@ export function AboutSection() {
         }
       );
 
-      // Fade up education blocks
-      gsap.fromTo('.edu-block',
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.edu-container',
-            start: 'top 85%',
+      // Dynamic Scroll Scrub for Education Blocks
+      const eduBlocks = gsap.utils.toArray('.edu-block');
+      eduBlocks.forEach((block) => {
+        gsap.fromTo(block,
+          { opacity: 0, x: -50, scale: 0.95, filter: 'blur(8px)' },
+          {
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            filter: 'blur(0px)',
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: block,
+              start: 'top 90%',
+              end: 'top 60%',
+              scrub: 1,
+            }
           }
-        }
-      );
+        );
+      });
       
       // Fade in skill tags
       gsap.fromTo('.skill-tag-wrapper',
