@@ -165,7 +165,7 @@ export function TimelineSection() {
         
         <div className="ribbon-horizontal-wrapper">
           <div className="ribbon-title-float">
-             <h2 className="section-title text-shadow-glow">MISSION LOG.</h2>
+             <h2 className="section-title text-shadow-glow" style={{ textAlign: 'center' }}>PROJECT TIMELINE.</h2>
           </div>
 
           {/* Premium Laser Line SVG (Straight, high-tech) */}
