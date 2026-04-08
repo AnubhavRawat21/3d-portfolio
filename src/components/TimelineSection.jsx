@@ -1,6 +1,7 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from 'lenis/react';
 import '../content.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -9,7 +10,7 @@ const timelineProjects = [
   {
     id: 1,
     title: 'LockTron',
-    tech: 'Python, OpenCV, Arduino, Embedded C, Computer Vision',
+    tech: 'Python, OpenCV, Arduino, Embedded C',
     date: 'Sep 2024',
     gradient: 'from-[#f12711] to-[#f5af19]',
     image: '/images/locktron.jpeg',
@@ -20,10 +21,10 @@ const timelineProjects = [
       'Optimized system response with real-time feedback loops'
     ],
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
       </svg>
     )
   },
@@ -40,9 +41,8 @@ const timelineProjects = [
       'Applied agile methodologies boosting team efficiency by 40%'
     ],
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
-        <polyline points="16 18 22 12 16 6"></polyline>
-        <polyline points="8 6 2 12 8 18"></polyline>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
       </svg>
     )
   },
@@ -60,16 +60,15 @@ const timelineProjects = [
       'Utilized Pandas & NumPy for large-scale data processing and analytics'
     ],
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
       </svg>
     )
   },
   {
     id: 4,
     title: 'Swarm Robotics',
-    tech: 'ROS2, Gazebo, RViz, ArUco, Embedded Systems',
+    tech: 'ROS2, Gazebo, RViz, ArUco',
     date: 'Dec 2025 - Jan 2026',
     image: '/images/ros2.jpeg',
     gradient: 'from-[#00c6ff] to-[#0072ff]',
@@ -80,10 +79,8 @@ const timelineProjects = [
       'Cleared simulation round for advanced competition stages'
     ],
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M12 16v-4"></path>
-        <path d="M12 8h.01"></path>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="node-svg-icon">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
       </svg>
     )
   }
@@ -92,6 +89,16 @@ const timelineProjects = [
 export function TimelineSection() {
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
+  const lenis = useLenis();
+
+  // Halts horizontal scrolling while user is inspecting a project
+  const handleMouseEnter = () => {
+    if (lenis) lenis.stop();
+  };
+
+  const handleMouseLeave = () => {
+    if (lenis) lenis.start();
+  };
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -99,7 +106,6 @@ export function TimelineSection() {
       const windowWidth = window.innerWidth;
       const scrollAmount = scrollWidth - windowWidth;
 
-      // Ensure the section exists before trying to pin logic
       if (scrollAmount > 0) {
         gsap.to(scrollRef.current, {
           x: -scrollAmount,
@@ -110,17 +116,17 @@ export function TimelineSection() {
             end: () => `+=${scrollAmount}`,
             pin: true,
             scrub: 1,
-            invalidateOnRefresh: true,  // recalculate on resize
+            invalidateOnRefresh: true,
           }
         });
 
-        // Entrance animation for Ribbon
-        gsap.fromTo('.ribbon-path',
-          { strokeDashoffset: 5000, strokeDasharray: 5000 },
+        // Entrance animation for sleek straight laser line
+        gsap.fromTo('.laser-core',
+          { scaleX: 0, transformOrigin: 'left center' },
           {
-            strokeDashoffset: 0,
+            scaleX: 1,
             duration: 2,
-            ease: 'power2.inOut',
+            ease: 'power3.inOut',
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top 50%',
@@ -128,13 +134,15 @@ export function TimelineSection() {
           }
         );
 
-        gsap.fromTo('.ribbon-fill',
-          { opacity: 0 },
+        // Nodes sequentially appearing
+        gsap.fromTo('.cyber-node',
+          { scale: 0, opacity: 0 },
           {
+            scale: 1,
             opacity: 1,
-            duration: 1.5,
-            delay: 0.5,
-            ease: 'power2.inOut',
+            duration: 0.8,
+            stagger: 0.3,
+            ease: 'back.out(1.5)',
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top 50%',
@@ -144,71 +152,55 @@ export function TimelineSection() {
       }
     }, containerRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      // Emergency failsafe to ensure scroll resumes if unmounted while hovering
+      if (lenis) lenis.start();
+      ctx.revert();
+    };
+  }, [lenis]);
 
   return (
-    // We add 100vh height to take up the full screen while pinned.
     <section ref={containerRef} id="timeline-section" className="timeline-horizontal-container">
       <div className="timeline-horizontal-scroll" ref={scrollRef}>
         
         <div className="ribbon-horizontal-wrapper">
           <div className="ribbon-title-float">
-             <h2 className="section-title">PROJECT TIMELINE.</h2>
+             <h2 className="section-title text-shadow-glow">MISSION LOG.</h2>
           </div>
 
-          {/* Ribbon SVG background - Wide viewBox for all nodes */}
+          {/* Premium Laser Line SVG (Straight, high-tech) */}
           <div className="ribbon-svg-container">
             <svg viewBox="0 0 3600 400" preserveAspectRatio="none" className="ribbon-svg">
               <defs>
-                <linearGradient id="glowGradient" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#f12711" />
-                  <stop offset="33%" stopColor="#e94057" />
-                  <stop offset="66%" stopColor="#8a2387" />
-                  <stop offset="100%" stopColor="#0072ff" />
-                </linearGradient>
-                <linearGradient id="bodyGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="80%" stopColor="#d1d1d1" />
-                  <stop offset="100%" stopColor="#a1a1a1" />
-                </linearGradient>
-                <linearGradient id="topGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="100%" stopColor="#f0f0f0" />
-                </linearGradient>
-                <filter id="blurGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="15" />
+                <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
                 </filter>
+                <linearGradient id="laserGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#4facfe" />
+                  <stop offset="50%" stopColor="#00f2fe" />
+                  <stop offset="100%" stopColor="#4facfe" />
+                </linearGradient>
               </defs>
 
-              <path 
-                className="ribbon-fill"
-                d="M-50,200 C250,50 650,350 900,200 C1150,50 1550,350 1800,200 C2050,50 2450,350 2700,200 C2950,50 3350,350 3600,200"
-                fill="none" 
-                stroke="url(#glowGradient)" 
-                strokeWidth="50" 
-                filter="url(#blurGlow)" 
-                opacity="0.8"
+              {/* Background ambient glow line */}
+              <line 
+                x1="0" y1="200" x2="3600" y2="200" 
+                stroke="rgba(0, 198, 255, 0.2)" 
+                strokeWidth="20" 
+                filter="url(#laserGlow)" 
               />
-
-              <path 
-                className="ribbon-fill"
-                d="M-50,200 C250,50 650,350 900,200 C1150,50 1550,350 1800,200 C2050,50 2450,350 2700,200 C2950,50 3350,350 3600,200 L3600,260 C3350,410 2950,110 2700,260 C2450,410 2050,110 1800,260 C1550,410 1150,110 900,260 C650,410 250,110 -50,260 Z" 
-                fill="url(#bodyGradient)" 
-              />
-              
-              <path 
-                className="ribbon-fill"
-                d="M-50,200 C250,50 650,350 900,200 C1150,50 1550,350 1800,200 C2050,50 2450,350 2700,200 C2950,50 3350,350 3600,200 L3600,230 C3350,380 2950,80 2700,230 C2450,380 2050,80 1800,230 C1550,380 1150,80 900,230 C650,380 250,80 -50,230 Z" 
-                fill="url(#topGradient)" 
-              />
-              
-              <path 
-                className="ribbon-path"
-                d="M-50,200 C250,50 650,350 900,200 C1150,50 1550,350 1800,200 C2050,50 2450,350 2700,200 C2950,50 3350,350 3600,200"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="4"
+              {/* Intense core laser line */}
+              <line 
+                className="laser-core"
+                x1="0" y1="200" x2="3600" y2="200" 
+                stroke="url(#laserGradient)" 
+                strokeWidth="4" 
+                filter="url(#laserGlow)" 
               />
             </svg>
           </div>
@@ -216,25 +208,30 @@ export function TimelineSection() {
           <div className="ribbon-nodes-container">
             {timelineProjects.map((proj, index) => {
               const isTop = index % 2 === 0;
-              // X positions matching the peaks of our path:
-              // Peak 1: ~450
-              // Peak 2: ~1350
-              // Peak 3: ~2250
-              // Peak 4: ~3150
-              const xPos = 450 + (index * 900);
+              // Spread uniformly along the straight line
+              const xPos = 400 + (index * 850);
               
               return (
                 <div 
                   key={proj.id} 
-                  className={`ribbon-node ${isTop ? 'node-top' : 'node-bottom'}`}
-                  style={{ left: `${xPos}px` }}
+                  className="cyber-node-wrapper"
+                  style={{ left: `${xPos}px`, top: '200px' }}
                 >
-                  <div className={`node-icon-wrapper gradient-${proj.id}`}>
-                    {proj.icon}
+                  <div className={`cyber-node gradient-${proj.id}`}>
+                    <div className="cyber-node-inner">
+                      {proj.icon}
+                    </div>
                   </div>
                   
-                  {/* Collapsible/Expandable Hover Area */}
-                  <div className="node-content hover-expand">
+                  {/* Stem connecting node to card */}
+                  <div className={`cyber-stem ${isTop ? 'stem-top' : 'stem-bottom'}`}></div>
+
+                  {/* Centered Glassmorphic Expandable Card */}
+                  <div 
+                    className={`node-content hover-glass ${isTop ? 'content-top' : 'content-bottom'}`}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
                     <div className="node-content-header">
                        <span className={`node-title gradient-text-${proj.id}`}>{proj.title}</span>
                        <span className="node-tech">{proj.tech}</span>
@@ -255,8 +252,6 @@ export function TimelineSection() {
                     </div>
                   </div>
 
-                  <div className="node-pin-line"></div>
-                  <div className={`node-dot bg-gradient-${proj.id}`}></div>
                 </div>
               );
             })}
